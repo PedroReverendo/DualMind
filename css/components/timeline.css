@@ -1,0 +1,138 @@
+/* Timeline Section Styles */
+.timeline-section {
+    background-color: #2d4056;
+    color: white;
+    padding: 50px 0;
+    position: relative;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.section-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-bold);
+    color: #fff;
+    text-align: center;
+    margin-bottom: 0;
+}
+
+.section-subtitle {
+    font-family: 'Poppins', sans-serif;
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-medium);
+    color: #7fb9b9;
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 40px;
+}
+
+.timeline {
+    position: relative;
+    padding-top: 60px;
+}
+
+.timeline-line {
+    position: absolute;
+    top: 100px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background-color: #c0c0c0;
+    z-index: 1;
+}
+
+.timeline-arrow {
+    position: absolute;
+    right: 0;
+    top: -7px;
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 16px solid #c0c0c0;
+}
+
+.timeline-steps {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    z-index: 2;
+}
+
+.timeline-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 23%;
+    position: relative;
+}
+
+.step-circle {
+    width: 60px;
+    height: 60px;
+    background-color: #2d4056;
+    border: 2px solid #c0c0c0;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.step-number {
+    font-family: 'Poppins', sans-serif;
+    font-size: 20px;
+    font-weight: var(--font-weight-bold);
+    color: #7fb9b9;
+}
+
+.step-content {
+    text-align: center;
+}
+
+.step-title {
+    font-family: 'Poppins', sans-serif;
+    font-size: var(--font-size-md);
+    font-weight: var(--font-weight-bold);
+    margin-bottom: 10px;
+}
+
+.step-description {
+    font-family: 'Poppins', sans-serif;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-normal);
+    color: rgba(255, 255, 255, 0.8);
+    line-height: 1.4;
+}
+
+/* Responsive styles */
+@media (max-width: 768px) {
+    .timeline-steps {
+        flex-direction: column;
+        gap: 30px;
+    }
+    
+    .timeline-step {
+        width: 100%;
+        flex-direction: row;
+        align-items: flex-start;
+    }
+    
+    .timeline-line {
+        display: none;
+    }
+    
+    .step-circle {
+        margin-right: 15px;
+        margin-bottom: 0;
+    }
+    
+    .step-content {
+        text-align: left;
+    }
+}

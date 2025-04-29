@@ -1,0 +1,143 @@
+/* Feature Card Component */
+.feature-cards-section {
+  padding: var(--spacing-4xl) 0;
+  background-color: var(--color-primary);
+}
+
+.feature-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xl);
+  margin-bottom: var(--spacing-4xl);
+  padding: 0;
+  background-color: transparent;
+  border-radius: 0;
+}
+
+.feature-card:last-child {
+  margin-bottom: 0;
+}
+
+.feature-card__media {
+  position: relative;
+  background-color: transparent;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.feature-card__media img {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  border-radius: var(--border-radius-md);
+}
+
+.feature-card__audio-player {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  z-index: 2;
+}
+
+.feature-card__audio-player i {
+  background-color: var(--color-tertiary);
+  color: var(--color-primary);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.audio-wave {
+  width: 100px;
+}
+
+.feature-card__add-button {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background-color: var(--color-tertiary);
+  color: var(--color-primary);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.feature-card__content {
+  flex: 1;
+  padding: 0;
+}
+
+.feature-card__title {
+  font-size: var(--font-size-2xl);
+  margin-bottom: var(--spacing-lg);
+  color: var(--color-text);
+}
+
+.feature-card__title .text-accent {
+  color: var(--color-secondary);
+}
+
+.feature-card__description {
+  margin-bottom: var(--spacing-xl);
+  line-height: 1.7;
+  color: var(--color-text-muted);
+}
+
+/* Estilos específicos para la primera tarjeta (Flashcard) */
+.feature-card:nth-child(1) .feature-card__media {
+  background-color: transparent;
+  border-radius: var(--border-radius-lg);
+  padding: var(--spacing-xl);
+  min-height: 300px;
+}
+
+/* Estilos específicos para la segunda tarjeta (Pomodoro) */
+.feature-card:nth-child(2) .feature-card__media {
+  background-color: transparent;
+  padding: 0;
+}
+
+/* Estilos específicos para la tercera tarjeta (Quizzes) */
+.feature-card:nth-child(3) .feature-card__media {
+  background-color: transparent;
+  padding: 0;
+}
+
+@media (min-width: 768px) {
+  .feature-card {
+    flex-direction: row;
+    align-items: center;
+  }
+  
+  .feature-card--reversed {
+    flex-direction: row-reverse;
+  }
+  
+  .feature-card__media,
+  .feature-card__content {
+    flex: 1;
+    padding: var(--spacing-xl);
+  }
+  
+  .feature-card__media {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .feature-card__media img {
+    max-width: 100%;
+  }
+}
