@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dualmind Flashcards - Sistema de Estudio Inteligente</title>
+  
+  <!-- Estilos base -->
+  <link rel="stylesheet" href="css/normalize.css">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/base.css">
+  
+  <!-- Componentes -->
+  <link rel="stylesheet" href="css/components/header.css">
+  <link rel="stylesheet" href="css/components/buttons.css">
+  <link rel="stylesheet" href="css/components/footer.css">
+  
+  <!-- Estilos específicos de flashcards -->
+  <link rel="stylesheet" href="css/flashcards.css">
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container header__container">
+      <a href="index.html" class="header__logo">
+        <img src="/placeholder.svg?height=40&width=150" alt="Dualmind Logo">
+      </a>
+      <nav class="header__nav">
+        <a href="index.html" class="nav-link">
+          <i class="fas fa-home"></i> Inicio
+        </a>
+        <a href="flashcards.html" class="nav-link active">
+          <i class="fas fa-layer-group"></i> Flashcards
+        </a>
+        <a href="#" class="nav-link">
+          <i class="fas fa-clock"></i> Pomodoro
+        </a>
+        <a href="#" class="nav-link">
+          <i class="fas fa-question-circle"></i> Quizzes
+        </a>
+      </nav>
+      <div class="header__actions">
+        <button class="btn btn--secondary">
+          <i class="fas fa-user"></i> Mi Cuenta
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Aplicación de Flashcards -->
+  <main class="flashcards-app">
+    <!-- Canvas para partículas de fondo -->
+    <canvas id="particles-canvas"></canvas>
+    
+    <!-- Contenedor para confeti -->
+    <div id="confetti-container"></div>
+    
+    <div class="flashcards-container">
+      <!-- Vista del Dashboard -->
+      <section id="dashboard-view" class="dashboard-view">
+        <div class="dashboard-header">
+          <h1 class="dashboard-title">Mis Flashcards</h1>
+          <div class="dashboard-actions">
+            <div class="search-container">
+              <input type="text" id="search-decks" placeholder="Buscar mazos...">
+              <i class="fas fa-search search-icon"></i>
+            </div>
+            <button id="create-deck-btn" class="action-btn create-deck-btn">
+              <i class="fas fa-plus"></i> Nuevo Mazo
+            </button>
+          </div>
+        </div>
+        
+        <!-- Estadísticas del Dashboard -->
+        <div class="dashboard-stats">
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-layer-group"></i>
+            </div>
+            <div class="stat-info">
+              <div class="stat-value" id="total-decks">0</div>
+              <div class="stat-label">Mazos</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-clone"></i>
+            </div>
+            <div class="stat-info">
+              <div class="stat-value" id="total-cards">0</div>
+              <div class="stat-label">Tarjetas</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="stat-info">
+              <div class="stat-value" id="mastered-cards">0</div>
+              <div class="stat-label">Dominadas</div>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon">
+              <i class="fas fa-hourglass-half"></i>
+            </div>
+            <div class="stat-info">
+              <div class="stat-value" id="due-cards">0</div>
+              <div class="stat-label">Pendientes</div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Contenedor de Mazos -->
+        <div id="decks-container" class="decks-container">
+          <!-- Los mazos se generarán dinámicamente con JavaScript -->
+        </div>
+        
+        <!-- Estado vacío (se muestra cuando no hay mazos) -->
+        <div id="empty-state" class="deck-placeholder">
+          <div class="placeholder-icon">
+            <i class="fas fa-layer-group"></i>
+          </div>
+          <h3>No tienes mazos de flashcards</h3>
+          <p>Crea tu primer mazo para comenzar a estudiar con el sistema de repetición espaciada.</p>
+          <button id="create-first-deck-btn" class="action-btn primary-btn">
+            <i class="fas fa-plus"></i> Crear mi primer mazo
+          </button>
+        </div>
+        
+        <!-- Footer del Dashboard -->
+        <div class="dashboard-footer">
+          <div class="progress-container">
+            <div class="progress-info">
+              <div class="progress-label">Nivel <span id="user-level">1</span></div>
+              <div class="progress-percentage"><span id="user-xp">0</span> / <span id="next-level-xp">100</span> XP</div>
+            </div>
+            <div class="progress-bar">
+              <div id="xp-progress" class="progress-fill" style="width: 0%"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Vista de Crear Mazo -->
+      <section id="create-deck-view" class="create-deck-view hidden">
+        <div class="view-header">
+          <button id="back-to-dashboard-btn" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+          </button>
+          <h2 class="view-title">Crear Nuevo Mazo</h2>
+        </div>
+        
+        <form id="create-deck-form">
+          <div class="form-group">
+            <label for="deck-title">Título del Mazo</label>
+            <input type="text" id="deck-title" placeholder="Ej: Vocabulario de Inglés" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="deck-description">Descripción (opcional)</label>
+            <textarea id="deck-description" placeholder="Describe brevemente el contenido de este mazo..."></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label for="deck-category">Categoría</label>
+            <select id="deck-category">
+              <option value="languages">Idiomas</option>
+              <option value="science">Ciencias</option>
+              <option value="math">Matemáticas</option>
+              <option value="history">Historia</option>
+              <option value="arts">Artes</option>
+              <option value="technology">Tecnología</option>
+              <option value="other">Otros</option>
+            </select>
+          </div>
+          
+          <div class="form-group">
+            <label>Color del Mazo</label>
+            <div class="color-picker">
+              <div class="color-option" data-color="#7ECBC0" style="background-color: #7ECBC0;"></div>
+              <div class="color-option" data-color="#64FFDA" style="background-color: #64FFDA;"></div>
+              <div class="color-option" data-color="#4DB6AC" style="background-color: #4DB6AC;"></div>
+              <div class="color-option" data-color="#FFD54F" style="background-color: #FFD54F;"></div>
+              <div class="color-option" data-color="#FF8A65" style="background-color: #FF8A65;"></div>
+              <div class="color-option" data-color="#BA68C8" style="background-color: #BA68C8;"></div>
+              <div class="color-option" data-color="#90CAF9" style="background-color: #90CAF9;"></div>
+              <div class="color-option" data-color="#A5D6A7" style="background-color: #A5D6A7;"></div>
+            </div>
+          </div>
+          
+          <div class="form-actions">
+            <button type="button" id="cancel-create-deck-btn" class="action-btn cancel-btn">
+              <i class="fas fa-times"></i> Cancelar
+            </button>
+            <button type="button" id="save-deck-btn" class="action-btn primary-btn">
+              <i class="fas fa-save"></i> Guardar Mazo
+            </button>
+          </div>
+        </form>
+      </section>
+      
+      <!-- Vista de Mazo -->
+      <section id="deck-view" class="deck-view hidden">
+        <div class="view-header">
+          <button id="back-to-dashboard-from-deck-btn" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+          </button>
+          <h2 class="view-title" id="deck-title-display">Nombre del Mazo</h2>
+        </div>
+        
+        <div class="deck-info">
+          <div class="deck-description" id="deck-description-display">
+            Descripción del mazo...
+          </div>
+          <div class="deck-stats">
+            <div class="deck-stat">
+              <div class="stat-value" id="deck-card-count">0</div>
+              <div class="stat-label">Tarjetas</div>
+            </div>
+            <div class="deck-stat">
+              <div class="stat-value" id="deck-study-sessions">0</div>
+              <div class="stat-label">Sesiones</div>
+            </div>
+            <div class="deck-stat">
+              <div class="stat-value" id="deck-due-cards">0</div>
+              <div class="stat-label">Pendientes</div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="cards-container">
+          <div class="cards-header">
+            <h3>Tarjetas</h3>
+            <div class="cards-actions">
+              <button id="add-card-btn" class="action-btn primary-btn">
+                <i class="fas fa-plus"></i> Añadir Tarjeta
+              </button>
+              <button id="start-study-btn" class="action-btn secondary-btn">
+                <i class="fas fa-graduation-cap"></i> Estudiar
+              </button>
+            </div>
+          </div>
+          
+          <div id="cards-container" class="cards-list">
+            <!-- Las tarjetas se generarán dinámicamente con JavaScript -->
+          </div>
+          
+          <!-- Estado vacío (se muestra cuando no hay tarjetas) -->
+          <div id="empty-cards-state" class="deck-placeholder">
+            <div class="placeholder-icon">
+              <i class="fas fa-clone"></i>
+            </div>
+            <h3>Este mazo no tiene tarjetas</h3>
+            <p>Añade algunas tarjetas para comenzar a estudiar.</p>
+            <button id="add-first-card-btn" class="action-btn primary-btn">
+              <i class="fas fa-plus"></i> Añadir mi primera tarjeta
+            </button>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Vista de Crear Tarjeta -->
+      <section id="create-card-view" class="create-card-view hidden">
+        <div class="view-header">
+          <button id="back-to-deck-btn" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+          </button>
+          <h2 class="view-title">Crear Nueva Tarjeta</h2>
+        </div>
+        
+        <div class="card-preview">
+          <div id="card-preview-inner" class="card-preview-inner">
+            <div class="card-preview-front">
+              <div id="preview-front-content" class="preview-content">Frente de la tarjeta</div>
+            </div>
+            <div class="card-preview-back">
+              <div id="preview-back-content" class="preview-content">Reverso de la tarjeta</div>
+            </div>
+          </div>
+        </div>
+        
+        <button id="flip-preview-btn" class="flip-preview-btn">
+          <i class="fas fa-sync-alt"></i> Voltear tarjeta
+        </button>
+        
+        <form id="create-card-form">
+          <div class="form-group">
+            <label for="card-front">Frente de la Tarjeta</label>
+            <textarea id="card-front" placeholder="Escribe la pregunta o concepto..." required></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label for="card-back">Reverso de la Tarjeta</label>
+            <textarea id="card-back" placeholder="Escribe la respuesta o explicación..." required></textarea>
+          </div>
+          
+          <div class="form-group">
+            <label>Tipo de Contenido</label>
+            <div class="content-type-selector">
+              <button type="button" class="content-type-btn active" data-type="text">
+                <i class="fas fa-font"></i>
+                <span>Texto</span>
+              </button>
+              <button type="button" class="content-type-btn" data-type="image">
+                <i class="fas fa-image"></i>
+                <span>Imagen</span>
+              </button>
+              <button type="button" class="content-type-btn" data-type="audio">
+                <i class="fas fa-volume-up"></i>
+                <span>Audio</span>
+              </button>
+            </div>
+          </div>
+          
+          <div class="form-actions">
+            <button type="button" id="cancel-create-card-btn" class="action-btn cancel-btn">
+              <i class="fas fa-times"></i> Cancelar
+            </button>
+            <button type="button" id="save-card-btn" class="action-btn primary-btn">
+              <i class="fas fa-save"></i> Guardar
+            </button>
+            <button type="button" id="save-and-add-btn" class="action-btn secondary-btn">
+              <i class="fas fa-plus"></i> Guardar y Añadir Otra
+            </button>
+          </div>
+        </form>
+      </section>
+      
+      <!-- Vista de Estudio -->
+      <section id="study-view" class="study-view hidden">
+        <div class="view-header">
+          <button id="back-to-deck-from-study-btn" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+          </button>
+          <h2 class="view-title" id="study-deck-title">Estudiando: Nombre del Mazo</h2>
+        </div>
+        
+        <div class="study-container">
+          <div id="study-card-container" class="study-card-container">
+            <div class="study-card">
+              <div id="study-card-inner" class="study-card-inner">
+                <div class="study-card-front">
+                  <div id="study-card-front-content" class="study-card-content">
+                    Frente de la tarjeta
+                  </div>
+                </div>
+                <div class="study-card-back">
+                  <div id="study-card-back-content" class="study-card-content">
+                    Reverso de la tarjeta
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <button id="flip-study-card-btn" class="flip-card-btn">
+              <i class="fas fa-sync-alt"></i> Voltear tarjeta
+            </button>
+          </div>
+          
+          <div id="study-controls" class="study-controls hidden">
+            <div class="study-question">¿Qué tan bien conocías esta respuesta?</div>
+            <div class="difficulty-buttons">
+              <button class="difficulty-btn" data-difficulty="1">
+                <i class="fas fa-frown"></i>
+                <span>No la sabía</span>
+              </button>
+              <button class="difficulty-btn" data-difficulty="2">
+                <i class="fas fa-meh"></i>
+                <span>Difícil</span>
+              </button>
+              <button class="difficulty-btn" data-difficulty="3">
+                <i class="fas fa-smile"></i>
+                <span>Bien</span>
+              </button>
+              <button class="difficulty-btn" data-difficulty="4">
+                <i class="fas fa-grin-stars"></i>
+                <span>Perfecto</span>
+              </button>
+            </div>
+          </div>
+          
+          <div class="study-progress">
+            Tarjeta <span id="cards-progress">1/10</span>
+          </div>
+          
+          <!-- Resumen de la sesión de estudio -->
+          <div id="study-session-summary" class="study-session-summary hidden">
+            <h3>¡Sesión Completada!</h3>
+            <div class="summary-stats">
+              <div class="summary-stat">
+                <div class="summary-value" id="summary-total-cards">0</div>
+                <div class="summary-label">Tarjetas</div>
+              </div>
+              <div class="summary-stat">
+                <div class="summary-value" id="summary-correct-cards">0</div>
+                <div class="summary-label">Correctas</div>
+              </div>
+              <div class="summary-stat">
+                <div class="summary-value" id="summary-mastered-cards">0</div>
+                <div class="summary-label">Dominadas</div>
+              </div>
+              <div class="summary-stat">
+                <div class="summary-value" id="summary-xp-earned">0</div>
+                <div class="summary-label">XP Ganados</div>
+              </div>
+            </div>
+            <div class="summary-actions">
+              <button id="restart-study-btn" class="action-btn secondary-btn">
+                <i class="fas fa-redo"></i> Estudiar de Nuevo
+              </button>
+              <button id="return-to-deck-btn" class="action-btn primary-btn">
+                <i class="fas fa-check"></i> Finalizar
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+  
+  <!-- Tutorial Overlay -->
+  <div id="tutorial-overlay" class="tutorial-overlay hidden">
+    <div class="tutorial-container">
+      <div class="tutorial-header">
+        <h3>Tutorial de Flashcards</h3>
+        <button id="close-tutorial-btn" class="tutorial-close-btn">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div id="tutorial-content" class="tutorial-content">
+        <!-- Los pasos del tutorial se generarán dinámicamente con JavaScript -->
+      </div>
+      <div class="tutorial-footer">
+        <button id="prev-tutorial-btn" class="tutorial-btn" disabled>
+          <i class="fas fa-arrow-left"></i> Anterior
+        </button>
+        <div id="tutorial-dots" class="tutorial-dots">
+          <!-- Los puntos del tutorial se generarán dinámicamente con JavaScript -->
+        </div>
+        <button id="next-tutorial-btn" class="tutorial-btn">
+          Siguiente <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer__container">
+      <div class="footer__logo">
+        <img src="/placeholder.svg?height=40&width=150" alt="Dualmind Logo">
+      </div>
+      <div class="footer__links">
+        <div class="footer__links-column">
+          <h4>Herramientas</h4>
+          <ul>
+            <li><a href="flashcards.html">Flashcards</a></li>
+            <li><a href="#">Pomodoro</a></li>
+            <li><a href="#">Quizzes</a></li>
+          </ul>
+        </div>
+        <div class="footer__links-column">
+          <h4>Recursos</h4>
+          <ul>
+            <li><a href="#">Blog</a></li>
+            <li><a href="#">Guías</a></li>
+            <li><a href="#">Tutoriales</a></li>
+          </ul>
+        </div>
+        <div class="footer__links-column">
+          <h4>Compañía</h4>
+          <ul>
+            <li><a href="#">Sobre Nosotros</a></li>
+            <li><a href="#">Contacto</a></li>
+            <li><a href="#">Términos</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <div class="container">
+        <p>&copy; 2023 Dualmind. Todos los derechos reservados.</p>
+      </div>
+    </div>
+  </footer>
+  
+  <!-- Scripts -->
+  <script src="js/flashcards.js"></script>
+  <script src="js/flashcards-effects.js"></script>
+  <script src="js/flashcards-tutorial.js"></script>
+  <script src="js/flashcards-main.js"></script>
+</body>
+</html>

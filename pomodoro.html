@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro - Dualmind</title>
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/components/header.css">
+    <link rel="stylesheet" href="css/components/footer.css">
+    <link rel="stylesheet" href="css/pomodoro.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Header Component -->
+    <header class="header">
+        <div class="container">
+            <div class="header__logo">
+                <a href="index.html">
+                    <h1>Dual<span class="text-accent">mind</span></h1>
+                </a>
+            </div>
+            <nav class="header__nav">
+                <!-- Placeholder for navigation -->
+            </nav>
+        </div>
+    </header>
+
+    <!-- Pomodoro App -->
+    <div class="pomodoro-app">
+        <div class="pomodoro-container">
+            <div class="pomodoro-layout">
+                <!-- Left Panel: Timer & Controls -->
+                <div class="pomodoro-panel timer-panel">
+                    <h2 class="panel-title">Pomodoro <span class="text-accent">Timer</span></h2>
+                    
+                    <div class="timer-scene">
+                        <div class="timer-3d-space">
+                            <div class="timer-circle">
+                                <svg class="timer-svg" viewBox="0 0 100 100">
+                                    <circle class="timer-circle-bg" cx="50" cy="50" r="45"></circle>
+                                    <circle class="timer-circle-progress" cx="50" cy="50" r="45"></circle>
+                                </svg>
+                                <div class="timer-display">
+                                    <span class="timer-minutes">25</span>:<span class="timer-seconds">00</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="pomodoro-modes">
+                        <button class="pomodoro-mode-btn active" data-mode="pomodoro" data-time="25">
+                            <i class="fas fa-brain"></i> Pomodoro
+                        </button>
+                        <button class="pomodoro-mode-btn" data-mode="shortBreak" data-time="5">
+                            <i class="fas fa-coffee"></i> Descanso Corto
+                        </button>
+                        <button class="pomodoro-mode-btn" data-mode="longBreak" data-time="15">
+                            <i class="fas fa-couch"></i> Descanso Largo
+                        </button>
+                    </div>
+                    
+                    <div class="pomodoro-controls">
+                        <button class="pomodoro-btn" id="start-btn">
+                            <i class="fas fa-play"></i> Iniciar
+                        </button>
+                        <button class="pomodoro-btn" id="pause-btn" disabled>
+                            <i class="fas fa-pause"></i> Pausar
+                        </button>
+                        <button class="pomodoro-btn" id="reset-btn">
+                            <i class="fas fa-redo-alt"></i> Reiniciar
+                        </button>
+                    </div>
+                    
+                    <div class="pomodoro-stats">
+                        <div class="stat-item">
+                            <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-label">Pomodoros</span>
+                                <span class="stat-value" id="completed-pomodoros">0</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-label">Tiempo Enfocado</span>
+                                <span class="stat-value" id="total-focus-time">0 min</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-label">Nivel</span>
+                                <span class="stat-value" id="user-level">1</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Panel: Tasks & Progress -->
+                <div class="pomodoro-panel tasks-panel">
+                    <h2 class="panel-title">Tareas <span class="text-accent">Pendientes</span></h2>
+                    
+                    <div class="progress-bar-container">
+                        <div class="progress-label">
+                            <span>Nivel de Productividad</span>
+                            <span id="productivity-percentage">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="productivity-bar"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="task-input-container">
+                        <input type="text" id="task-input" placeholder="Añadir una tarea...">
+                        <button id="add-task-btn"><i class="fas fa-plus"></i></button>
+                    </div>
+                    
+                    <div class="tasks-container">
+                        <div class="tasks-header">
+                            <span class="task-column">Tarea</span>
+                            <span class="pomodoro-column">Pomodoros</span>
+                            <span class="actions-column">Acciones</span>
+                        </div>
+                        
+                        <ul class="tasks-list" id="tasks-list">
+                            <!-- Las tareas se añadirán aquí dinámicamente -->
+                        </ul>
+                    </div>
+                    
+                    <div class="tasks-summary">
+                        <div class="summary-item">
+                            <i class="fas fa-list-check"></i>
+                            <span>Tareas Totales: <span id="total-tasks">0</span></span>
+                        </div>
+                        <div class="summary-item">
+                            <i class="fas fa-check"></i>
+                            <span>Completadas: <span id="completed-tasks">0</span></span>
+                        </div>
+                    </div>
+                    
+                    <div class="achievement-container">
+                        <h3 class="achievement-title">Logros Desbloqueados</h3>
+                        <div class="achievements-grid" id="achievements-grid">
+                            <!-- Los logros se añadirán aquí dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Elementos para efectos visuales -->
+    <div id="confetti-container"></div>
+    <div id="failure-overlay" class="failure-overlay"></div>
+    <canvas id="particles-canvas"></canvas>
+
+    <script src="js/animations.js"></script>
+    <script src="js/pomodoro-effects.js"></script>
+    <script src="js/pomodoro-tasks.js"></script>
+    <script src="js/pomodoro.js"></script>
+</body>
+</html>
